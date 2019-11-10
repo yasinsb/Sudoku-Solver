@@ -34,7 +34,7 @@ Smart choice will try to speed-up the recursive method by finding all cells that
 ### Backward improvement
 Given the currently seated numbers backward method ask if there is any cell that could be filled by only one specific number. This is what most people do when they try to solve Sudoku by pen and paper.
 
-### Forward improve
+### Forward improvement
 This imprvement ask if there is any number that could only seat in one place out of all possible places in a row, in a column or in a 3*3 block. It will fill-out all those cases with their inevitable choices.
 
 To make it more clear assume we have a row as such
