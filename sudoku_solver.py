@@ -52,17 +52,6 @@ def complist(myarr):
                         results_list[i][j].append(k)
     return results_list
 
-
-def backward_improve(myarr):
-    improve = False
-    comb = complist(myarr)
-    for i in range(9):
-        for j in range(9):
-            if len(comb[i][j]) == 1:
-                myarr[i,j] = comb[i][j][0]
-                improve = True
-    return myarr, improve
-
 def find_unique(mylol):
     """
     :param mylol:
@@ -108,16 +97,13 @@ def forward_improve(arr_in):
 def improve_it(myarr):
     solsdk = myarr.copy()
     for iter in range(100):
-        back_improve = True
-        forw_improve = True
-        solsdk, back_improve = backward_improve(solsdk)
         solsdk, forw_improve = forward_improve(solsdk)
-        if back_improve  == False and forw_improve == False:
+        if forw_improve == False:
             return solsdk
 
 def solve_sudoku(myarr,deep=0, smart=True):
     if deep == 100:
-        print('Did not find a solution, something should be wring')
+        print('Did not find a solution, something should be wrong')
         return False, myarr
     comb = complist(myarr)
     if len(max([j for i in comb for j in i], key=len)) == 0:
@@ -146,10 +132,19 @@ def main():
     import argparse
     parser = argparse.ArgumentParser(prog='Sudoku Solver 0.1')
     parser.add_argument('-s','--sudoku_array',type=list, help='Input a matrix-shaped list of numbers')
+    parser.add_argument('-f','--sudoku_file',type=str, help='Input a yaml file with a `sudoku` key to read table from')
     args = parser.parse_args()
-    result, solution = solve_sudoku(args.sudoku_array)
-    if result:
-        print(solution)
-
+    if args.sudoku_array:
+        mysdk = args.sudoku_array
+    elif args.sudoku_file:
+        import yaml
+        print('Reading %s' % args.sudoku_file)
+        mysdk = yaml.safe_load(open(args.sudoku_file,'r'))['sudoku']
+    else:
+        pass
+    if mysdk:
+        result, solution = solve_sudoku(np.array(mysdk))
+        if result:
+            print(solution)
 if __name__=='__main__':
     main()
